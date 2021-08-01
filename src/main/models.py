@@ -4,8 +4,7 @@ from flask_marshmallow import Marshmallow
 from sqlalchemy import Column
 from flask import current_app as app
 from main.init import db
-from werkzeug.security import generate_password_hash,check_password_hash
-from main.init import login
+
 
 
 
@@ -50,30 +49,6 @@ class persona_schema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = persona
         load_instance = True
-
-class USERS(db.Model):
-    __tablename__ ='users'
-    id= Column(db.Integer, primary_key=True,autoincrement=True)
-    login_username = Column(db.String, unique=True, nullable=False)
-    login_password = Column(db.String, nullable=False)
-    email = Column(db.String,nullable=False)
-
-    def __init__(self,login_username,login_password,email):
-        self.login_username = login_username
-        self.login_password = login_password
-        self.email = email
-
-    def generate_hash_password(login_passsword):
-        return generate_password_hash(login_passsword)
-
-    def check_password(self, password):
-        return check_password_hash(self, password)
-
-class users_schema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model=USERS
-        load_instance = True
-
 
 db.create_all()
 
