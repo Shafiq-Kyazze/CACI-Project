@@ -1,14 +1,14 @@
-"""Model.py"""
+"""Model file which contains the Data models to be uploaded in the database.
+THe file also includes the schema"""
 
 from flask_marshmallow import Marshmallow
 from sqlalchemy import Column
 from main.init import db
 
+ma = Marshmallow(db)    #Marshmallow instance
 
-
-
+# Persona Data model
 class persona(db.Model):
-    #Profiles table to house the data
     __tablename__ = 'persona'
     id = Column(db.Integer, primary_key=True,autoincrement=True)
     username = Column(db.String,unique=True)    #Uniquesness Makes the GET method more effective
@@ -26,6 +26,7 @@ class persona(db.Model):
     blood_group = Column(db.String)
     website = Column(db.String)
 
+    """Making sure all the atttributes in the class object are filled in during the post method if there was one"""
     def __init__(self, username,name,sex,address,mail,birthdate,job,company,ssn,residence,current_location_Latitude,current_location_Longitude,blood_group,website):
         self.username = username
         self.name = name
@@ -42,13 +43,11 @@ class persona(db.Model):
         self.blood_group = blood_group
         self.website = website
 
-ma = Marshmallow(db)
 
-class persona_schema(ma.SQLAlchemyAutoSchema):
+#Schema
+class persona_schema(ma.SQLAlchemyAutoSchema):  #Automatically generates fields
     class Meta:
         model = persona
-        load_instance = True
-
-db.create_all()
+        load_instance = True  #Deserialize to instance of persona data model
 
 
