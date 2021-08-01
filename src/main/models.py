@@ -2,7 +2,6 @@
 
 from flask_marshmallow import Marshmallow
 from sqlalchemy import Column
-from flask import current_app as app
 from main.init import db
 
 
