@@ -4,8 +4,8 @@ from flask_marshmallow import Marshmallow
 from sqlalchemy import Column
 from flask import current_app as app
 from main.init import db
-from flask_bcrypt import generate_password_hash,check_password_hash
-
+from werkzeug.security import generate_password_hash,check_password_hash
+from main.init import login
 
 
 
@@ -13,7 +13,7 @@ class persona(db.Model):
     #Profiles table to house the data
     __tablename__ = 'persona'
     id = Column(db.Integer, primary_key=True,autoincrement=True)
-    username = Column(db.String)
+    username = Column(db.String,unique=True)    #Uniquesness Makes the GET method more effective
     name = Column(db.String)
     sex = Column(db.String)
     address = Column(db.String)
@@ -46,21 +46,33 @@ class persona(db.Model):
 
 ma = Marshmallow(db)
 
-class persona_schema(ma.Schema):
+class persona_schema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        fields = ('username','name','sex','address','mail','birthdate','job','company','ssn','residence','current_location_Latitude','current_location_Longitude','blood_group,website')
+        model = persona
+        load_instance = True
 
-class User(db.Model):
+class USERS(db.Model):
     __tablename__ ='users'
     id= Column(db.Integer, primary_key=True,autoincrement=True)
     login_username = Column(db.String, unique=True, nullable=False)
     login_password = Column(db.String, nullable=False)
+    email = Column(db.String,nullable=False)
 
-    def hash_password(self):
-        self.login_password = generate_password_hash(self.login_password).decode('utf8')
+    def __init__(self,login_username,login_password,email):
+        self.login_username = login_username
+        self.login_password = login_password
+        self.email = email
 
-    def check_password(self, login_password):
-        return check_password_hash(self.password, login_password)
+    def generate_hash_password(login_passsword):
+        return generate_password_hash(login_passsword)
+
+    def check_password(self, password):
+        return check_password_hash(self, password)
+
+class users_schema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model=USERS
+        load_instance = True
 
 
 db.create_all()
