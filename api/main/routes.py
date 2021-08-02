@@ -4,6 +4,12 @@ from main.models import persona,db
 from main.models import persona_schema
 from flask import jsonify
 from flask import current_app as app
+
+import werkzeug
+werkzeug.cached_property = werkzeug.utils.cached_property  # To deal with ImportError: cannot import name 'cached_property' from 'werkzeug'  when importing flask restplus
+import flask.scaffold       # To deal with ImportError: cannot import name '_endpoint_from_view_func' from 'flask.helpers' when importing flask restplus
+flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
+
 from flask_restplus import Resource,Api
 
 #Initialising lask Restplus  application with flask app
@@ -16,10 +22,14 @@ api = Api(
 )
 
 
-persona_Schema = persona_schema()
-personas_Scehma = persona_schema(many=True)
+Persona_Schema = persona_schema()
+Personas_Scehma = persona_schema(many=True)
 
 
+def query_parser(obj):
+    for item in obj:
+        for row in item:
+            return row.__dict__
 
 """Get specific profile from database"""
 @api.route("/search/<Username>")
@@ -28,16 +38,17 @@ class search_for_person(Resource):
         profile = persona.query.filter(persona.username == Username).first()
         if profile is None:
             return jsonify({"msg": "Information requested is not available in the database"})
-        json_profile = persona_Schema.jsonify(profile)
-        return json_profile
+        json_profile = Persona_Schema.dump(profile)
+        return jsonify(json_profile)
 
 
 """Return all existing profiles in the database"""
 @api.route("/people")
 class return_all_profiles(Resource):
     def get(self):
-        profiles = persona.query.all()
-        json_profiles = jsonify(personas_Scehma.dump(profiles))
+        profiles = persona.query.limit(1000).all()  #Limiting to the first 1000 due to space reasons
+        print(profiles)
+        json_profiles = Personas_Scehma.dump(profiles)
         return json_profiles
 
 """Delete a profile"""
@@ -47,6 +58,6 @@ class delete_single_profile(Resource):
         profile_to_delete = persona.query.filter(persona.username == username).first()
         if profile_to_delete is not None:
             db.session.delete(profile_to_delete)
-            db.commit()
+            db.session.commit()
             return jsonify({"msg": "Profile was deleted from database"})
         return jsonify({"msg": "Information requested is not  available in the database"})

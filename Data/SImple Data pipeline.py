@@ -3,7 +3,7 @@ from pandas import json_normalize
 import psycopg2
 import psycopg2.extras as ex
 
-DATABASE_URI = "postgresql://username@password/database"
+DATABASE_URI = "postgres://nsufkesh:q-ZxqddaQzOf8_cnLSzRAQp0pobQ5YWB@rogue.db.elephantsql.com/nsufkesh"
 connection = psycopg2.connect(DATABASE_URI)
 conn = connection
 
@@ -22,7 +22,7 @@ tuple_data = list(map(tuple, df.to_numpy()))
 #Using psycopg to upload data
 cur = conn.cursor() #Creating cursor
 ex.execute_batch(cur,
-                 "INSERT INTO persona(username,name,sex,address,mail,birthdate,job,company,ssn,residence,current_Latitude,current_Longitude,blood_group,website)  values(%s ,%s, %s ,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple_data
+                 "INSERT INTO persona_profiles(username,name,sex,address,mail,birthdate,job,company,ssn,residence,current_Latitude,current_Longitude,blood_group,website)  values(%s ,%s, %s ,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple_data
                  )
 conn.commit()
 conn.close()

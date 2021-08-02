@@ -9,7 +9,7 @@ ma = Marshmallow(db)    #Marshmallow instance
 
 # Persona Data model
 class persona(db.Model):
-    __tablename__ = 'persona'
+    __tablename__ = 'persona_profiles'
     id = Column(db.Integer, primary_key=True,autoincrement=True)
     username = Column(db.String)    #Uniquesness Makes the GET method more effective
     name = Column(db.String)
@@ -45,10 +45,11 @@ class persona(db.Model):
 
 
 #Schema
-class persona_schema(ma.SQLAlchemyAutoSchema):  #Automatically generates fields
+class persona_schema(ma.Schema):  #Automatically generates fields
     class Meta:
         model = persona
-        load_instance = True  #Deserialize to instance of persona data model
+        fields = ('username','name','sex','address','mail','birthdate','job','company','ssn','residence','current_Latitude','current_Longitude','blood_group','website')
+        #load_instance = True  #Deserialize to instance of persona data model
 
 
 db.create_all()  #Creating the persona data model

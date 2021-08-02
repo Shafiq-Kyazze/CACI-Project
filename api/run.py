@@ -1,4 +1,5 @@
-"""Run python file to be ran inordered to start the API"""
+"""Run python file to be ran inorder to start the API and deploy it on your local computer"""
+
 from main.init import init_app
 
 app = init_app()
