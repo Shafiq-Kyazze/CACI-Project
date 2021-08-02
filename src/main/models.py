@@ -11,7 +11,7 @@ ma = Marshmallow(db)    #Marshmallow instance
 class persona(db.Model):
     __tablename__ = 'persona'
     id = Column(db.Integer, primary_key=True,autoincrement=True)
-    username = Column(db.String,unique=True)    #Uniquesness Makes the GET method more effective
+    username = Column(db.String)    #Uniquesness Makes the GET method more effective
     name = Column(db.String)
     sex = Column(db.String)
     address = Column(db.String)
@@ -21,13 +21,13 @@ class persona(db.Model):
     company = Column(db.String)
     ssn = Column(db.String)
     residence = Column(db.String)
-    current_location_Latitude = Column(db.Float(8))
-    current_location_Longitude = Column(db.Float(8))
+    current_latitude = Column(db.Float(8))
+    current_longitude = Column(db.Float(8))
     blood_group = Column(db.String)
     website = Column(db.String)
 
     """Making sure all the atttributes in the class object are filled in during the post method if there was one"""
-    def __init__(self, username,name,sex,address,mail,birthdate,job,company,ssn,residence,current_location_Latitude,current_location_Longitude,blood_group,website):
+    def __init__(self, username,name,sex,address,mail,birthdate,job,company,ssn,residence,current_latitude,current_longitude,blood_group,website):
         self.username = username
         self.name = name
         self.sex = sex
@@ -38,8 +38,8 @@ class persona(db.Model):
         self.company = company
         self.ssn = ssn
         self.residence = residence
-        self.current_location_Latitude = current_location_Latitude
-        self.current_location_Longitude = current_location_Longitude
+        self.current_latitude = current_latitude
+        self.current_longitude = current_longitude
         self.blood_group = blood_group
         self.website = website
 
@@ -50,4 +50,6 @@ class persona_schema(ma.SQLAlchemyAutoSchema):  #Automatically generates fields
         model = persona
         load_instance = True  #Deserialize to instance of persona data model
 
+
+db.create_all()  #Creating the persona data model
 

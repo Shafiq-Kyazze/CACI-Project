@@ -15,7 +15,6 @@ def init_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app) #Initialise SQLAlchemy to flask app
     with app.app_context():
-        db.create_all()  #Creating the persona data model
 
         from main import routes, models
         from main.utils import errors
