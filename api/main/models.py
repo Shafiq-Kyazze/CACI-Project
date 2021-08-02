@@ -49,7 +49,7 @@ class persona_schema(ma.Schema):  #Automatically generates fields
     class Meta:
         model = persona
         fields = ('username','name','sex','address','mail','birthdate','job','company','ssn','residence','current_Latitude','current_Longitude','blood_group','website')
-        #load_instance = True  #Deserialize to instance of persona data model
+
 
 
 db.create_all()  #Creating the persona data model

@@ -12,6 +12,8 @@ flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 
 from flask_restplus import Resource,Api
 
+
+
 #Initialising lask Restplus  application with flask app
 api = Api(
     app=app, title="CACI API project demo",
@@ -22,14 +24,9 @@ api = Api(
 )
 
 
-Persona_Schema = persona_schema()
+Persona_Schema = persona_schema() #To serialize queries
 Personas_Scehma = persona_schema(many=True)
 
-
-def query_parser(obj):
-    for item in obj:
-        for row in item:
-            return row.__dict__
 
 """Get specific profile from database"""
 @api.route("/search/<Username>")
@@ -39,7 +36,7 @@ class search_for_person(Resource):
         if profile is None:
             return jsonify({"msg": "Information requested is not available in the database"})
         json_profile = Persona_Schema.dump(profile)
-        return jsonify(json_profile)
+        return json_profile
 
 
 """Return all existing profiles in the database"""
@@ -47,7 +44,6 @@ class search_for_person(Resource):
 class return_all_profiles(Resource):
     def get(self):
         profiles = persona.query.limit(1000).all()  #Limiting to the first 1000 due to space reasons
-        print(profiles)
         json_profiles = Personas_Scehma.dump(profiles)
         return json_profiles
 
