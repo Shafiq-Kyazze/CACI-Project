@@ -17,4 +17,4 @@ The API uses the following methods and url endpoints to fetch or delete data
 
 **Swagger UI**
 
-The API also includes a swagger UI that can be loaded through following the steps [here](https://swagger.io/docs/swagger-inspector/how-to-use-swagger-inspector/)
+The API also includes a swagger UI that can be loaded through following the steps as shown [here](https://swagger.io/docs/swagger-inspector/how-to-use-swagger-inspector/)
